@@ -1,0 +1,15 @@
+{
+  "name": "projeto-tempo",
+  "version": "1.0.0",
+  "description": "Projeto de API de tempo",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": " node --watch app.js"
+  },
+  "author": "Renan Dev",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
