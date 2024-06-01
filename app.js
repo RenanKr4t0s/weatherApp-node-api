@@ -1,12 +1,12 @@
 const express = require ('express')
 const https = require('https')
+const bodyParser = require('body-parser')
 const app = express()
 
-const city = "lat=-23,6577&lon=-46,5684" //mas pode ser o city name
-const key = "4fcca30e049797fd0982dcec942fd71a" //minha chave pessoal
-const sistem = "metric" //sistema de medidas
+app.use(bodyParser.urlencoded({extended:true}))
 
-const urlTempo = `https://api.openweathermap.org/data/2.5/weather?${city}&appid=${key}&units=${sistem}`
+
+
 
 
 app.get('/',(require, response)=>{
@@ -14,10 +14,13 @@ app.get('/',(require, response)=>{
 })
 
 app.post('/',(require, response)=>{
-    response.send(console.log("Deu certo"))
-})
+    console.log(require.body.cityName)
+    const city = require.body.cityName
+    const key = "4fcca30e049797fd0982dcec942fd71a" //minha chave pessoal
+    const sistem = "metric" //sistema de medidas
 
-app.get('/response',(req,res)=>{
+    const urlTempo = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=${sistem}`
+
     https.get(urlTempo,(resApi)=>{
         console.log("statusCode: ", resApi.statusCode)
         console.log('Headers:',resApi.headers.connection)
@@ -27,19 +30,20 @@ app.get('/response',(req,res)=>{
             let tempInfos = dataObject.main
             let weatherInf = dataObject.weather[0]
             let urlImage = `https://openweathermap.org/img/wn/${weatherInf.icon}@2x.png`
-
-            //Eu iria usar um re.send mas ele não permite mais de um envio
-            res.write(`<h1><img src=${urlImage} ></img> A temperatura em Rudge Ramos é ${tempInfos.temp} graus </h1>`)
-            res.write(`
+            
+            response.write(`<h1><img src=${urlImage} ></img> A temperatura em ${city}: ${tempInfos.temp} graus </h1>`)
+            response.write(`
             <div>
                 <h2>Podemos considerar o tempo "${weatherInf.description}" por hoje</h2>
-                <h3>Temos o minimo de${tempInfos.temp_min} e máximo de ${tempInfos.temp_max}</h3>
+                <h3>Temos o min. de${tempInfos.temp_min} e max. de ${tempInfos.temp_max}</h3>
             <div>
-            `)            
+            `)   
+            response.send()        
         })  
     })
-
 })
+
+
 
 app.listen(3000,()=>{
     console.log ("App rodando na porta 3000")
