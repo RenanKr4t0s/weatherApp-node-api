@@ -1,7 +1,9 @@
+const password = require ('./password')
 const express = require ('express')
 const https = require('https')
 const bodyParser = require('body-parser')
 const app = express()
+
 
 app.use(bodyParser.urlencoded({extended:true}))
 
@@ -16,10 +18,10 @@ app.get('/',(require, response)=>{
 app.post('/',(require, response)=>{
     console.log(require.body.cityName)
     const city = require.body.cityName
-    const key = "4fcca30e049797fd0982dcec942fd71a" //minha chave pessoal
-    const sistem = "metric" //sistema de medidas
+    const key =  password // minha chave pessoal
+    const sistemMesures = "metric"
 
-    const urlTempo = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=${sistem}`
+    const urlTempo = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=${sistemMesures}`
 
     https.get(urlTempo,(resApi)=>{
         console.log("statusCode: ", resApi.statusCode)
@@ -35,7 +37,7 @@ app.post('/',(require, response)=>{
             response.write(`
             <div>
                 <h2>Podemos considerar o tempo "${weatherInf.description}" por hoje</h2>
-                <h3>Temos o min. de${tempInfos.temp_min} e max. de ${tempInfos.temp_max}</h3>
+                <h3>Temperatura min. de ${tempInfos.temp_min} e max. de ${tempInfos.temp_max}</h3>
             <div>
             `)   
             response.send()        
