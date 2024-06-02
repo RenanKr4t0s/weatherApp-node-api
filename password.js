@@ -1,3 +1,3 @@
-const password = "4fcca30e049797fd0982dcec942fd71a"
+const password = //sua chave aqui!
 
 module.exports = password
